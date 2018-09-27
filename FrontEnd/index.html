@@ -1,0 +1,38 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="bower_components/alchemyjs/dist/styles/vendor.css">
+    <link rel="stylesheet" href="bower_components/alchemyjs/dist/alchemy.css">
+    <link rel="stylesheet" href="css/own.css">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+</head>
+<body>
+
+<div background="images/background.png" class="header">
+    <div class="header-title">
+    <h1>BRAIN CONTRIBUTORS</h1>
+    </div>
+</div>
+<div class="SelectOwner">
+    <form>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Github Projet Owner link</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <button type="submit" class="btn btn-primary own-btn">Create the connections</button>
+    </form>
+
+</div>
+<div class="alchemy" id="alchemy"></div>
+
+<script type="text/javascript" src="bower_components/alchemyjs/dist/scripts/vendor.js"></script>
+<script type="text/javascript" src="bower_components/alchemyjs/dist/alchemy.js"></script>
+<script type="text/javascript">
+    alchemy.begin({
+        dataSource: "data.json",
+        nodeCaption: 'type',
+        nodeMouseOver: 'caption',
+        cluster: true,
+        clusterColours: ["#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02"]})
+</script>
+</body>
+</html>
