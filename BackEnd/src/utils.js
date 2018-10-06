@@ -11,6 +11,17 @@ function getReposLanguagesStats(reposLanguages = []) {
   return stats;
 }
 
+function getContributorsName(Contributors = []) {
+  const name = new Set();
+  for (let i = 0; i < Contributors.length; i++) {
+    for (let j = 0; j < Contributors[i].length; j++) {
+      name.add(Contributors[i][j].login);
+    }
+  }
+  console.log(name);
+}
+
 module.exports = {
   getReposLanguagesStats,
+  getContributorsName,
 };

@@ -30,6 +30,7 @@ app.get('/languages/:username', (req, res, next) => { // eslint-disable-line no-
 
 app.get('/collaborateurs/:username', (req, res, next) => {
   client.userCollaborateurs(req.params.username)
+    .then(utils.getContributorsName)
     .then(stats => res.send(stats))
     .catch(next);
 });
