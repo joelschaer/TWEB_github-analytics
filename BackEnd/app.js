@@ -2,30 +2,29 @@
 require('dotenv/config');
 const express = require('express');
 const cors = require('cors');
-const fetch = require('fetch-node');
+const Github = require('./src/Github');
+const Database = require('./src/Database');
+const utils = require('./src/utils');
 
 const app = express();
 const port = process.env.PORT || 3000;
+const client = new Github({ token: process.env.OAUTH_TOKEN });
+
 
 // Enable CORS for the client app
- app.use(cors());
+app.use(cors());
 
-app.get('/user/:username', (req, res, next) => {
-  // res.send('Hello, ${req.params.username}');
-  fetch('https://api.github.com/users/${req.params.username}', {
-    headers: {
-      Accept: 'application/vnd.github.v3+json',
-      Authorization: 'token ${process.env.OAUTH_TOKEN}',
-    },
-  })
-    .then(result => result.json()
-      .then((data) => {
-        if (result.ok) {
-          res.send(data);
-        } else {
-          throw new Error('Woops');
-        }
-      })).catch(next);
+app.get('/users/:username', (req, res, next) => { // eslint-disable-line no-unused-vars
+  client.user(req.params.username)
+    .then(user => res.send(user))
+    .catch(next);
+});
+
+app.get('/languages/:username', (req, res, next) => { // eslint-disable-line no-unused-vars
+  client.userLanguages(req.params.username)
+    .then(utils.getReposLanguagesStats)
+    .then(stats => res.send(stats))
+    .catch(next);
 });
 
 // Forward 404 to error handler
