@@ -5,6 +5,7 @@ const cors = require('cors');
 const Github = require('./src/Github');
 const Database = require('./src/Database');
 const utils = require('./src/utils');
+const fetch = require('node-fetch');
 
 const app = express();
 const port = process.env.PORT || 3000;
