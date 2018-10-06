@@ -2,20 +2,24 @@
 require('dotenv/config');
 const express = require('express');
 const cors = require('cors');
-const fetch = require('fetch-node');
+const fetch = require('node-fetch');
+
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Enable CORS for the client app
- app.use(cors());
+app.use(cors());
 
-app.get('/user/:username', (req, res, next) => {
-  // res.send('Hello, ${req.params.username}');
-  fetch('https://api.github.com/users/${req.params.username}', {
+app.get('/', (req, res, next) => {
+  res.send('hello');
+});
+
+app.get('/users/:username', (req, res, next) => {
+  fetch(`https://api.github.com/users/${req.params.username}`, {
     headers: {
       Accept: 'application/vnd.github.v3+json',
-      Authorization: 'token ${process.env.OAUTH_TOKEN}',
+      Authorization: `token ${process.env.OAUTH_TOKEN}`,
     },
   })
     .then(result => result.json()
@@ -23,7 +27,7 @@ app.get('/user/:username', (req, res, next) => {
         if (result.ok) {
           res.send(data);
         } else {
-          throw new Error('Woops');
+          throw new Error('Woops', result);
         }
       })).catch(next);
 });
