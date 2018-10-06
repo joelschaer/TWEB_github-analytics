@@ -53,13 +53,13 @@ class Neo4j {
     });
   }
 
-  newCollaorator(user, collaborator) {
+  newCollaborator(user, collaborator, repository) {
     const session = this.driver.session();
 
     const resultPromise = session.run(
       `MATCH (user:User {username:$user}), (collaborator:User {username:$collaborator})
-       CREATE (user)-[:Collaborate]-(collaborator)`,
-      { name: `${user}`, collaborator: `${collaborator}` },
+       CREATE (user)-[:Collaborate {repository: $repo}]->(collaborator)`,
+      { user: `${user}`, collaborator: `${collaborator}`, repo: `${repository}` },
     );
 
     resultPromise.then(result => {
@@ -79,5 +79,5 @@ const neo = new Neo4j('neo4j', '1234');
 
 //neo.creatUser('joel');
 
-neo.getUser('joel');
+neo.newCollaborator('joel', 'yann', 'sym-repo');
 
