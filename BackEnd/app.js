@@ -27,6 +27,12 @@ app.get('/languages/:username', (req, res, next) => { // eslint-disable-line no-
     .catch(next);
 });
 
+app.get('/collaborateurs/:username', (req, res, next) => {
+  client.userCollaborateurs(req.params.username)
+    .then(stats => res.send(stats))
+    .catch(next);
+});
+
 // Forward 404 to error handler
 app.use((req, res, next) => {
   const error = new Error('Not found');

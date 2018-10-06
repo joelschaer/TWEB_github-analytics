@@ -48,6 +48,18 @@ class Github {
     return this.request(`/users/${username}/repos`);
   }
 
+  repoCollabo(repoName) {
+    return this.request(`/repos/${repoName}/collaborators`);
+  }
+
+  userCollaborateurs(username) {
+    return this.repos(username)
+      .then((repos) => {
+        const getCollabo = repo => this.repoCollabo(repo.full_name);
+        return Promise.all(repos.map(getCollabo));
+      });
+  }
+
   repoLanguages(repoName) {
     return this.request(`/repos/${repoName}/languages`);
   }
