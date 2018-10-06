@@ -49,7 +49,7 @@ class Github {
   }
 
   repoCollabo(repoName) {
-    return this.request(`/repos/${repoName}/collaborators`);
+    return this.request(`/repos/${repoName}/contributors`);
   }
 
   userCollaborateurs(username) {
