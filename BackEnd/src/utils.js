@@ -26,7 +26,7 @@ function getContributorsName(data) {
     // parcours les contributeurs de chaque répos
     for (let j = 0; j < contributors[i].length; j++) {
       // on ne met pas le username dans la liste, seulement ses contributeurs
-      if (!contributors[i][j].login !== data.username) {
+      if (contributors[i][j].login !== data.username) {
         name.push(contributors[i][j].login);
       }
 

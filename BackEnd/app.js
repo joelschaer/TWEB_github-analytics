@@ -30,7 +30,8 @@ app.get('/languages/:username', (req, res, next) => { // eslint-disable-line no-
 });
 
 
-function addInDB(data) {
+function addInDB(data, username) {
+    db.creatUser(username);
   for (const project in data) {
     for (const name in data[project]) {
       for (let i = 0; i < name.length; i++) {
@@ -38,7 +39,7 @@ function addInDB(data) {
         if (!db.getUser(user)) {
           db.creatUser(user);
         }
-        db.newCollaborator(data.username, user, project);
+        db.newCollaborator(username, user, project);
       }
     }
   }
@@ -59,7 +60,7 @@ app.get('/collaborateurs/:username', (req, res, next) => {
       data.repos = value;
       // group repository and contributors and filtr where username is not contributors.
       data.contributorsByRepos = utils.getContributorsName(data);
-      addInDB(data.contributorsByRepos);
+      addInDB(data.contributorsByRepos, data.username);
       res.send(data.contributorsByRepos);
     });
 });

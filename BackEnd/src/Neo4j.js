@@ -7,7 +7,7 @@ class Neo4j {
   }
 
   finalize() {
-    this.driver.close();
+    // this.driver.close();
   }
 
   creatUser(username) {
@@ -45,16 +45,17 @@ class Neo4j {
 
       const record = result.records[0];
       const node = record.get(0);
-      console.log(node.properties.username);
+      // console.log(node.properties.username);
 
       this.finalize();
-      return (node.properties.username);
     }).catch(error => {
       console.log(error);
     });
   }
 
   newCollaborator(user, collaborator, repository) {
+    repository = repository.replace(/-/g, '_');
+    repository = repository.replace('/', '_');
     const session = this.driver.session();
 
     const resultPromise = session.run(
