@@ -25,10 +25,14 @@ function getContributorsName(data) {
 
     // parcours les contributeurs de chaque répos
     for (let j = 0; j < contributors[i].length; j++) {
-      name.push(contributors[i][j].login);
+      // on ne met pas le username dans la liste, seulement ses contributeurs
+      if (!contributors[i][j].login !== data.username) {
+        name.push(contributors[i][j].login);
+      }
 
-      // si le username choisi apparait dans la liste des contributeurs ok = true
-      if (contributors[i][j].login === data.username) {
+      // si le username choisi apparait dans la liste des contributeurs
+      // && que la liste ne contient pas que username
+      if ((contributors[i][j].login === data.username) && (contributors[i].length > 1)) {
         ok = true;
       }
     }

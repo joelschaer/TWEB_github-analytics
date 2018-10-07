@@ -48,6 +48,7 @@ class Neo4j {
       console.log(node.properties.username);
 
       this.finalize();
+      return (node.properties.username);
     }).catch(error => {
       console.log(error);
     });
@@ -57,9 +58,10 @@ class Neo4j {
     const session = this.driver.session();
 
     const resultPromise = session.run(
-      `MATCH (user:User {username:$user}), (collaborator:User {username:$collaborator})
-       CREATE (user)-[:Collaborate {repository: $repo}]->(collaborator)`,
-      { user: `${user}`, collaborator: `${collaborator}`, repo: `${repository}` },
+      `MATCH (user:User), (collaborator:User)
+      WHERE collaborator.username = $user AND user.username = $collaborator
+       CREATE (user)-[r:${repository}]->(collaborator)`,
+      { user: `${user}`, collaborator: `${collaborator}` },
     );
 
     resultPromise.then(result => {
@@ -77,7 +79,7 @@ module.exports = Neo4j;
 
 const neo = new Neo4j('neo4j', '1234');
 
-//neo.creatUser('joel');
+// neo.creatUser('joel');
+// neo.creatUser('yann');
 
-neo.newCollaborator('joel', 'yann', 'sym-repo');
-
+neo.newCollaborator('joel', 'yann', 'sym_repo');
