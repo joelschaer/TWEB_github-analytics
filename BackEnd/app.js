@@ -2,10 +2,10 @@
 require('dotenv/config');
 const express = require('express');
 const cors = require('cors');
+const fetch = require('node-fetch');
 const Github = require('./src/Github');
 const Database = require('./src/Database');
 const utils = require('./src/utils');
-const fetch = require('node-fetch');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -29,11 +29,21 @@ app.get('/languages/:username', (req, res, next) => { // eslint-disable-line no-
 });
 
 app.get('/collaborateurs/:username', (req, res, next) => {
-  client.userCollaborateurs(req.params.username)
-    .then(utils.getContributorsName)
-    .then(stats => res.send(stats))
-    .catch(next);
+  const data = {};
+  data.username = req.params.username;
+
+  client.userCollaborateurs(data.username)
+    .then(value => {
+      data.contributors = value;
+      return client.repos(data.username);
+    })
+    .then(value => {
+      data.repos = value;
+      data.contributorsByRepos = utils.getContributorsName(data);
+      res.send(data.contributorsByRepos);
+    });
 });
+
 
 // Forward 404 to error handler
 app.use((req, res, next) => {

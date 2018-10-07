@@ -11,14 +11,28 @@ function getReposLanguagesStats(reposLanguages = []) {
   return stats;
 }
 
-function getContributorsName(Contributors = []) {
-  const name = new Set();
-  for (let i = 0; i < Contributors.length; i++) {
-    for (let j = 0; j < Contributors[i].length; j++) {
-      name.add(Contributors[i][j].login);
+function getContributorsName(data) {
+  const repos = data.repos;
+  const contributors = data.contributors;
+
+  const listrepos = {};
+
+  for (let i = 0; i < contributors.length; i++) {
+    const name = [];
+    let ok = false;
+    for (let j = 0; j < contributors[i].length; j++) {
+      name.push(contributors[i][j].login);
+
+      if (contributors[i][j].login === data.username) {
+        ok = true;
+      }
+    }
+    if (ok) {
+      const repository = repos[i].full_name;
+      listrepos[repository] = name;
     }
   }
-  console.log(name);
+  return listrepos;
 }
 
 module.exports = {
