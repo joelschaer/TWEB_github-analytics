@@ -48,14 +48,14 @@ class Github {
     return this.request(`/users/${username}/repos`);
   }
 
-  repoCollabo(repoName) {
+  repoContributor(repoName) {
     return this.request(`/repos/${repoName}/contributors`);
   }
 
-  userCollaborateurs(username) {
+  userContributors(username) {
     return this.repos(username)
       .then((repos) => {
-        const getCollabo = repo => this.repoCollabo(repo.full_name);
+        const getCollabo = repo => this.repoContributor(repo.full_name);
         return Promise.all(repos.map(getCollabo));
       });
   }

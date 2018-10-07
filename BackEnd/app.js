@@ -4,7 +4,6 @@ const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
 const Github = require('./src/Github');
-const Database = require('./src/Database');
 const utils = require('./src/utils');
 
 const app = express();
@@ -32,13 +31,16 @@ app.get('/collaborateurs/:username', (req, res, next) => {
   const data = {};
   data.username = req.params.username;
 
-  client.userCollaborateurs(data.username)
+  // get the contributors form username
+  client.userContributors(data.username)
     .then(value => {
       data.contributors = value;
+      // get the repos form username
       return client.repos(data.username);
     })
     .then(value => {
       data.repos = value;
+      // group repository and contributors and filtr where username is not contributors.
       data.contributorsByRepos = utils.getContributorsName(data);
       res.send(data.contributorsByRepos);
     });
