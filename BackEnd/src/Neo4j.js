@@ -14,7 +14,7 @@ class Neo4j {
     const session = this.driver.session();
 
     const resultPromise = session.run(
-      'CREATE (user:User {username: $name}) RETURN user',
+      'MERGE (user:User {username: $name}) RETURN user',
       { name: `${username}` },
     );
 
@@ -54,6 +54,7 @@ class Neo4j {
   }
 
   newCollaborator(user, collaborator, repository) {
+    // Replace '-' and '/' by '_' for the database request.
     repository = repository.replace(/-/g, '_');
     repository = repository.replace('/', '_');
     const session = this.driver.session();
@@ -61,7 +62,7 @@ class Neo4j {
     const resultPromise = session.run(
       `MATCH (user:User), (collaborator:User)
       WHERE collaborator.username = $user AND user.username = $collaborator
-       CREATE (user)-[r:${repository}]->(collaborator)`,
+       MERGE (user)-[r:${repository} {username: collaborator.username + '<_>' + user.username }]->(collaborator)`,
       { user: `${user}`, collaborator: `${collaborator}` },
     );
 

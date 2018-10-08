@@ -31,14 +31,12 @@ app.get('/languages/:username', (req, res, next) => { // eslint-disable-line no-
 
 
 function addInDB(data, username) {
-    db.creatUser(username);
+  db.creatUser(username);
   for (const project in data) {
     for (const name in data[project]) {
       for (let i = 0; i < name.length; i++) {
         const user = data[project][i];
-        if (!db.getUser(user)) {
-          db.creatUser(user);
-        }
+        db.creatUser(user);
         db.newCollaborator(username, user, project);
       }
     }
