@@ -23,7 +23,7 @@ class Neo4j {
 
       const record = result.records[0];
       const node = record.get(0);
-      console.log(node.properties.username);
+      // console.log(node.properties.username);
 
       this.finalize();
     }).catch(error => {
@@ -48,6 +48,31 @@ class Neo4j {
       // console.log(node.properties.username);
 
       this.finalize();
+      return node;
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  getUserAll() {
+    const session = this.driver.session();
+
+    const resultPromise = session.run(
+      'MATCH (user) RETURN user',
+    );
+
+
+    resultPromise.then(result => {
+      session.close();
+      this.finalize();
+      const listUser = [];
+      for (let i = 0; i < result.records.length; i++) {
+        const record = result.records[i];
+        const user = {};
+        user.name = record.get(0).properties.username;
+        listUser.push(user);
+      }
+      return listUser;
     }).catch(error => {
       console.log(error);
     });

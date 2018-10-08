@@ -8,7 +8,7 @@ const utils = require('./src/utils');
 const Neo4j = require('./src/Neo4j');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3100;
 const client = new Github({ token: process.env.OAUTH_TOKEN });
 const db = new Neo4j('neo4j', '1234');
 
@@ -43,6 +43,41 @@ function addInDB(data, username) {
   }
 }
 
+function alchemyRendering(data, username) {
+  const json = {};
+  json.comment = `alchemy json file for ${username}`;
+  const nodes = [];
+  const edges = [];
+
+  const initialNode = {};
+  initialNode.caption = username;
+  initialNode.type = username;
+  initialNode.id = username;
+  initialNode.root = true;
+  nodes.push(initialNode);
+
+  for (const project in data) {
+    for (const name in data[project]) {
+      for (let i = 0; i < name.length; i++) {
+        const user = data[project][i];
+        const node = {};
+        node.caption = user;
+        node.type = user;
+        node.id = user;
+        if (!nodes.find(o => o.caption === node.caption)) nodes.push(node);
+        const edge = {};
+        edge.source = user;
+        edge.target = username;
+        edge.caption = project;
+        if (!edges.find(o => o.caption === edge.caption)) edges.push(edge);
+      }
+    }
+  }
+  json.nodes = nodes;
+  json.edges = edges;
+  return json;
+}
+
 app.get('/collaborateurs/:username', (req, res, next) => {
   const data = {};
   data.username = req.params.username;
@@ -59,7 +94,8 @@ app.get('/collaborateurs/:username', (req, res, next) => {
       // group repository and contributors and filtr where username is not contributors.
       data.contributorsByRepos = utils.getContributorsName(data);
       addInDB(data.contributorsByRepos, data.username);
-      res.send(data.contributorsByRepos);
+      const json = alchemyRendering(data.contributorsByRepos, data.username);
+      res.send(json);
     });
 });
 

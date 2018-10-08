@@ -9,23 +9,22 @@
 
 <div background="images/background.png" class="header">
     <div class="header-title">
-    <h1>BRAIN CONTRIBUTORS</h1>
+    <h1 id="test">BRAIN CONTRIBUTORS</h1>
     </div>
 </div>
 <div class="SelectOwner">
-    <form>
         <div class="form-group">
-            <label for="exampleInputEmail1">Github Projet Owner link</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+            <label for="exampleGithubname">Github Projet Owner name</label>
+            <input name="name" id="name" type="name" class="form-control" id="exampleGithubname" aria-describedby="name" placeholder="Enter github name">
         </div>
-        <button type="submit" class="btn btn-primary own-btn">Create the connections</button>
-    </form>
+        <button onclick="requestData()" class="btn btn-primary own-btn">Create the connections</button>
 
 </div>
 <div class="alchemy" id="alchemy"></div>
 
 <script type="text/javascript" src="bower_components/alchemyjs/dist/scripts/vendor.js"></script>
 <script type="text/javascript" src="bower_components/alchemyjs/dist/alchemy.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript">
     alchemy.begin({
         dataSource: "data.json",
