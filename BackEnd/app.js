@@ -7,7 +7,7 @@ const utils = require('./src/utils');
 const Neo4j = require('./src/Neo4j');
 
 const app = express();
-const port = process.env.PORT || 3100;
+const port = process.env.PORT || 3200;
 const client = new Github({ token: process.env.OAUTH_TOKEN });
 const db = new Neo4j('neo4j', '1234');
 
@@ -23,9 +23,10 @@ app.get('/users/:username', (req, res, next) => { // eslint-disable-line no-unus
 
 function addInDB(data, username) {
   // ajoute le username si existe pas.
+  const initialPromises = [];
   db.getUser(username).then((node) => {
     if (!node) {
-      db.creatUser(username);
+      initialPromises.push(db.creatUser(username));
     }
   });
 
@@ -43,37 +44,67 @@ function addInDB(data, username) {
   }
 
   const promisesUser = [];
-  names.forEach((userName) => {
-    promisesUser.push(
-      db.getUser(userName),
-    );
+  names.forEach((name) => {
+    db.getUser(name)
+      .then((user) => {
+        if (!user) {
+          promisesUser.push(db.creatUser(name));
+        }
+      });
   });
 
   const promisesProject = [];
   projects.forEach((project) => {
-    promisesProject.push(
-      db.getRelation(username, project.username, project.projectName),
-    );
+    db.getRelation(username, project.username, project.projectName)
+      .then((relation) => {
+        if (relation.length === 0) {
+          const monTableau = Array.from(projects);
+          for (let i = 0; i < monTableau.length; i++) {
+            promisesProject.push(
+              db.newCollaborator(username, monTableau[i].username, monTableau[i].projectName),
+            );
+          }
+        }
+      });
   });
 
-  Promise.all(promisesUser).then((nodes) => {
-    for (let i = 0; i < nodes.length; i++) {
-      const monTableau = Array.from(names);
-      if (!nodes[i]) {
-        db.creatUser(monTableau[i]);
-      }
-    }
-  });
+  Promise.all(initialPromises).then();
+  Promise.all(promisesUser).then();
+  Promise.all(promisesProject).then(console.log(4));
+  /*
+    const promisesUser = [];
+    names.forEach((userName) => {
+      promisesUser.push(
+        db.getUser(userName),
+      );
+    });
 
-  Promise.all(promisesProject).then((relations) => {
-    for (let i = 0; i < relations.length; i++) {
-      const monTableau = Array.from(projects);
-      if (relations[i].length === 0) {
-        db.newCollaborator(username, monTableau[i].username, monTableau[i].projectName);
-        console.log(4);
+    const promisesProject = [];
+    projects.forEach((project) => {
+      promisesProject.push(
+        db.getRelation(username, project.username, project.projectName),
+      );
+    });
+
+    Promise.all(promisesUser).then((nodes) => {
+      for (let i = 0; i < nodes.length; i++) {
+        const monTableau = Array.from(names);
+        if (!nodes[i]) {
+          db.creatUser(monTableau[i]);
+        }
       }
-    }
-  });
+    });
+
+    Promise.all(promisesProject).then((relations) => {
+      for (let i = 0; i < relations.length; i++) {
+        const monTableau = Array.from(projects);
+        if (relations[i].length === 0) {
+          db.newCollaborator(username, monTableau[i].username, monTableau[i].projectName);
+          console.log(4);
+        }
+      }
+    });
+    */
 }
 
 function alchemyRenderingEdge(json, username, res) {
@@ -95,7 +126,6 @@ function alchemyRenderingEdge(json, username, res) {
   }
   return Promise.all(promises).then((_) => {
     json.edges = edges;
-    console.log(`Result de alchemyRenderingEdge : ${json}`);
     return json;
   });
 }
@@ -125,7 +155,6 @@ function alchemyRendering(username) {
       nodes.push(node);
     }
     json.nodes = nodes;
-    console.log(`Result de alchemyRendering : ${json}`);
     return json;
   });
 }
