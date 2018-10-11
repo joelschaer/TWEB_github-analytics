@@ -71,40 +71,6 @@ function addInDB(data, username) {
   Promise.all(initialPromises).then();
   Promise.all(promisesUser).then();
   Promise.all(promisesProject).then(console.log(4));
-  /*
-    const promisesUser = [];
-    names.forEach((userName) => {
-      promisesUser.push(
-        db.getUser(userName),
-      );
-    });
-
-    const promisesProject = [];
-    projects.forEach((project) => {
-      promisesProject.push(
-        db.getRelation(username, project.username, project.projectName),
-      );
-    });
-
-    Promise.all(promisesUser).then((nodes) => {
-      for (let i = 0; i < nodes.length; i++) {
-        const monTableau = Array.from(names);
-        if (!nodes[i]) {
-          db.creatUser(monTableau[i]);
-        }
-      }
-    });
-
-    Promise.all(promisesProject).then((relations) => {
-      for (let i = 0; i < relations.length; i++) {
-        const monTableau = Array.from(projects);
-        if (relations[i].length === 0) {
-          db.newCollaborator(username, monTableau[i].username, monTableau[i].projectName);
-          console.log(4);
-        }
-      }
-    });
-    */
 }
 
 function alchemyRenderingEdge(json, username, res) {
