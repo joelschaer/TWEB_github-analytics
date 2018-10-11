@@ -2,7 +2,6 @@
 require('dotenv/config');
 const express = require('express');
 const cors = require('cors');
-const fetch = require('node-fetch');
 const Github = require('./src/Github');
 const utils = require('./src/utils');
 const Neo4j = require('./src/Neo4j');
@@ -19,13 +18,6 @@ app.use(cors());
 app.get('/users/:username', (req, res, next) => { // eslint-disable-line no-unused-vars
   client.user(req.params.username)
     .then(user => res.send(user))
-    .catch(next);
-});
-
-app.get('/languages/:username', (req, res, next) => { // eslint-disable-line no-unused-vars
-  client.userLanguages(req.params.username)
-    .then(utils.getReposLanguagesStats)
-    .then(stats => res.send(stats))
     .catch(next);
 });
 
@@ -154,29 +146,6 @@ app.get('/collaborateurs/:username', (req, res, next) => {
     .then((sixthResult) => {
       res.send(sixthResult);
     });
-  /*
-    const data = {};
-    data.username = req.params.username;
-
-    // get the contributors form username
-    client.userContributors(data.username)
-      .then(value => {
-        data.contributors = value;
-        // get the repos form username
-        return client.repos(data.username);
-      })
-      .then(value => {
-        data.repos = value;
-        // group repository and contributors and filtr where username is not contributors.
-        data.contributorsByRepos = utils.getContributorsName(data);
-        addInDB(data.contributorsByRepos, data.username);
-        alchemyRendering(data.username).then((json) => {
-          alchemyRenderingEdge(json, data.username).then((jsonWithEdge) => {
-            res.send(jsonWithEdge);
-          });
-        });
-      });
-      */
 });
 
 

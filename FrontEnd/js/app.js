@@ -5,7 +5,6 @@ function getUserContributors(username){
         .then(res => res.json());
 }
 
-
 function requestData() {
 
     var username=document.getElementById('name').value;
