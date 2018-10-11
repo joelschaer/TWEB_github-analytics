@@ -29,53 +29,100 @@ app.get('/languages/:username', (req, res, next) => { // eslint-disable-line no-
     .catch(next);
 });
 
-
 function addInDB(data, username) {
-  db.creatUser(username);
+  // ajoute le username si existe pas.
+  db.getUser(username).then((node) => {
+    if (!node) {
+      db.creatUser(username);
+    }
+  });
+
+  const names = new Set();
+  const projects = new Set();
+
   for (const project in data) {
-    for (const name in data[project]) {
-      for (let i = 0; i < name.length; i++) {
-        const user = data[project][i];
-        db.creatUser(user);
-        db.newCollaborator(username, user, project);
-      }
+    for (let i = 0; i < data[project].length; i++) {
+      names.add(data[project][i]);
+      const relation = {};
+      relation.username = data[project][i];
+      relation.projectName = project;
+      projects.add(relation);
     }
   }
+
+  const promisesUser = [];
+  names.forEach((userName) => {
+    promisesUser.push(
+      db.getUser(userName),
+    );
+  });
+
+  const promisesProject = [];
+  projects.forEach((project) => {
+    promisesProject.push(
+      db.getRelation(username, project.username, project.projectName),
+    );
+  });
+
+  Promise.all(promisesUser).then((nodes) => {
+    for (let i = 0; i < nodes.length; i++) {
+      const monTableau = Array.from(names);
+      if (!nodes[i]) {
+        console.log(`addInDB : ${monTableau[i]} n'existe pas, je le crée ( ${nodes[i]} )`);
+        db.creatUser(monTableau[i]);
+      }
+    }
+  });
+
+  Promise.all(promisesProject).then((relations) => {
+    for (let i = 0; i < relations.length; i++) {
+      const monTableau = Array.from(projects);
+      if (relations[i].length === 0) {
+        console.log(`addInDB : ${monTableau[i].projectName} n'existe pas, je le crée ( ${relations[i]} )`);
+        db.newCollaborator(username, monTableau[i].username, monTableau[i].projectName);
+      }
+    }
+  });
 }
 
-function alchemyRendering(data, username) {
-  const json = {};
-  json.comment = `alchemy json file for ${username}`;
-  const nodes = [];
+function alchemyRenderingEdge(json, username, res) {
+  const promises = [];
   const edges = [];
+  for (const node in json.nodes) {
+    const name = json.nodes[node].caption;
 
-  const initialNode = {};
-  initialNode.caption = username;
-  initialNode.type = username;
-  initialNode.id = username;
-  initialNode.root = true;
-  nodes.push(initialNode);
-
-  for (const project in data) {
-    for (const name in data[project]) {
-      for (let i = 0; i < name.length; i++) {
-        const user = data[project][i];
-        const node = {};
-        node.caption = user;
-        node.type = user;
-        node.id = user;
-        if (!nodes.find(o => o.caption === node.caption)) nodes.push(node);
+    promises.push(db.getAllRelation(username, name).then((listRelation) => {
+      const relations = listRelation;
+      if (relations !== '') {
         const edge = {};
-        edge.source = user;
+        edge.source = name;
         edge.target = username;
-        edge.caption = project;
-        if (!edges.find(o => o.caption === edge.caption)) edges.push(edge);
+        edge.caption = relations;
+        edges.push(edge);
       }
-    }
+    }));
   }
-  json.nodes = nodes;
-  json.edges = edges;
-  return json;
+  return Promise.all(promises).then((_) => {
+    json.edges = edges;
+    return json;
+  });
+}
+
+function alchemyRendering(username) {
+  const json = {};
+  return db.getUserAll().then((listUser) => {
+    const nodes = [];
+    for (let i = 0; i < listUser.length; i++) {
+      const node = {};
+      const name = listUser[i].name;
+      node.caption = name;
+      node.type = name;
+      node.id = name;
+      nodes.push(node);
+    }
+    json.nodes = nodes;
+    return json;
+  });
 }
 
 app.get('/collaborateurs/:username', (req, res, next) => {
@@ -84,19 +131,52 @@ app.get('/collaborateurs/:username', (req, res, next) => {
 
   // get the contributors form username
   client.userContributors(data.username)
-    .then(value => {
-      data.contributors = value;
+    .then((result) => {
+      data.contributors = result;
       // get the repos form username
       return client.repos(data.username);
     })
-    .then(value => {
-      data.repos = value;
-      // group repository and contributors and filtr where username is not contributors.
-      data.contributorsByRepos = utils.getContributorsName(data);
-      addInDB(data.contributorsByRepos, data.username);
-      const json = alchemyRendering(data.contributorsByRepos, data.username);
-      res.send(json);
+    .then((newResult) => {
+      data.repos = newResult;
+      // group repository and contributors and filter where username is not contributors.
+      return utils.getContributorsName(data);
+    })
+    .then((thirdResult) => {
+      data.contributorsByRepos = thirdResult;
+      return addInDB(data.contributorsByRepos, data.username);
+    })
+    .then((fourthResult) => {
+      return alchemyRendering(data.username);
+    })
+    .then((fifthResult) => {
+      return alchemyRenderingEdge(fifthResult, data.username);
+    })
+    .then((sixthResult) => {
+      res.send(sixthResult);
     });
+  /*
+    const data = {};
+    data.username = req.params.username;
+
+    // get the contributors form username
+    client.userContributors(data.username)
+      .then(value => {
+        data.contributors = value;
+        // get the repos form username
+        return client.repos(data.username);
+      })
+      .then(value => {
+        data.repos = value;
+        // group repository and contributors and filtr where username is not contributors.
+        data.contributorsByRepos = utils.getContributorsName(data);
+        addInDB(data.contributorsByRepos, data.username);
+        alchemyRendering(data.username).then((json) => {
+          alchemyRenderingEdge(json, data.username).then((jsonWithEdge) => {
+            res.send(jsonWithEdge);
+          });
+        });
+      });
+      */
 });
 
 

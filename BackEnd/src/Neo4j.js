@@ -34,20 +34,17 @@ class Neo4j {
   getUser(username) {
     const session = this.driver.session();
 
-    const resultPromise = session.run(
+    return session.run(
       'MATCH (user:User {username:$name}) RETURN user',
       { name: `${username}` },
-    );
-
-
-    resultPromise.then(result => {
+    ).then(result => {
       session.close();
-
-      const record = result.records[0];
-      const node = record.get(0);
-      // console.log(node.properties.username);
-
       this.finalize();
+      const record = result.records[0];
+      let node = null;
+      if (result.records[0]) node = record.get(0);
+
+      //console.log(node.properties.username);
       return node;
     }).catch(error => {
       console.log(error);
@@ -57,22 +54,58 @@ class Neo4j {
   getUserAll() {
     const session = this.driver.session();
 
-    const resultPromise = session.run(
+    return session.run(
       'MATCH (user) RETURN user',
-    );
-
-
-    resultPromise.then(result => {
+    ).then(result => {
       session.close();
       this.finalize();
       const listUser = [];
       for (let i = 0; i < result.records.length; i++) {
         const record = result.records[i];
         const user = {};
-        user.name = record.get(0).properties.username;
+        if (typeof result.records[0] !== 'undefined') user.name = record.get(0).properties.username;
         listUser.push(user);
       }
       return listUser;
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  getRelation(usernameA, usernameB, relationName) {
+    const session = this.driver.session();
+    relationName = relationName.replace(/-/g, '_');
+    relationName = relationName.replace('/', '_');
+    return session.run(
+      `MATCH (:User {username: '${usernameA}'})-[r:${relationName}]-(b:User {username: '${usernameB}'}) RETURN r`,
+    ).then(result => {
+      session.close();
+      this.finalize();
+      const listRelation = [];
+      for (let i = 0; i < result.records.length; i++) {
+        const record = result.records[i];
+        const relation = {};
+        if (typeof result.records[0] !== 'undefined') relation.name = record.get(0).properties.username;
+        listRelation.push(relation);
+      }
+      return listRelation;
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  getAllRelation(usernameA, usernameB) {
+    const session = this.driver.session();
+    return session.run(
+      `MATCH (:User {username: '${usernameA}'})-[r]-(:User {username: '${usernameB}'}) RETURN r`,
+    ).then(result => {
+      session.close();
+      this.finalize();
+      let project = '';
+      for (let i = 0; i < result.records.length; i++) {
+        project += `${result.records[i].get(0).type}  `;
+      }
+      return project;
     }).catch(error => {
       console.log(error);
     });
@@ -87,13 +120,12 @@ class Neo4j {
     const resultPromise = session.run(
       `MATCH (user:User), (collaborator:User)
       WHERE collaborator.username = $user AND user.username = $collaborator
-       MERGE (user)-[r:${repository} {username: collaborator.username + '<_>' + user.username }]->(collaborator)`,
+       MERGE (user)-[r:${repository} {username: '${repository}' }]->(collaborator)`,
       { user: `${user}`, collaborator: `${collaborator}` },
     );
 
     resultPromise.then(result => {
       session.close();
-
       this.finalize();
     }).catch(error => {
       console.log(error);
