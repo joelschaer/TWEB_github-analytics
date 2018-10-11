@@ -60,7 +60,6 @@ function addInDB(data, username) {
     for (let i = 0; i < nodes.length; i++) {
       const monTableau = Array.from(names);
       if (!nodes[i]) {
-        console.log(`addInDB : ${monTableau[i]} n'existe pas, je le crée ( ${nodes[i]} )`);
         db.creatUser(monTableau[i]);
       }
     }
@@ -70,8 +69,8 @@ function addInDB(data, username) {
     for (let i = 0; i < relations.length; i++) {
       const monTableau = Array.from(projects);
       if (relations[i].length === 0) {
-        console.log(`addInDB : ${monTableau[i].projectName} n'existe pas, je le crée ( ${relations[i]} )`);
         db.newCollaborator(username, monTableau[i].username, monTableau[i].projectName);
+        console.log(4);
       }
     }
   });
@@ -96,23 +95,37 @@ function alchemyRenderingEdge(json, username, res) {
   }
   return Promise.all(promises).then((_) => {
     json.edges = edges;
+    console.log(`Result de alchemyRenderingEdge : ${json}`);
     return json;
   });
 }
 
 function alchemyRendering(username) {
   const json = {};
-  return db.getUserAll().then((listUser) => {
-    const nodes = [];
+  const nodes = [];
+
+  db.getUser(username).then((user) => {
+    if (user) {
+      const name = user.properties.username;
+      const node = {};
+      node.caption = name;
+      node.type = name;
+      node.id = name;
+      nodes.push(node);
+    }
+  });
+
+  return db.getUserAllLevel1(username).then((listUser) => {
     for (let i = 0; i < listUser.length; i++) {
       const node = {};
-      const name = listUser[i].name;
+      const name = listUser[i];
       node.caption = name;
       node.type = name;
       node.id = name;
       nodes.push(node);
     }
     json.nodes = nodes;
+    console.log(`Result de alchemyRendering : ${json}`);
     return json;
   });
 }
@@ -124,26 +137,33 @@ app.get('/collaborateurs/:username', (req, res, next) => {
   // get the contributors form username
   client.userContributors(data.username)
     .then((result) => {
+      console.log(1);
       data.contributors = result;
       // get the repos form username
       return client.repos(data.username);
     })
     .then((newResult) => {
+      console.log(2);
       data.repos = newResult;
       // group repository and contributors and filter where username is not contributors.
       return utils.getContributorsName(data);
     })
     .then((thirdResult) => {
+      console.log(3);
       data.contributorsByRepos = thirdResult;
       return addInDB(data.contributorsByRepos, data.username);
     })
     .then((fourthResult) => {
+      console.log(5);
       return alchemyRendering(data.username);
     })
     .then((fifthResult) => {
+      console.log(6);
       return alchemyRenderingEdge(fifthResult, data.username);
     })
     .then((sixthResult) => {
+      console.log(7);
+      console.log(sixthResult);
       res.send(sixthResult);
     });
 });
