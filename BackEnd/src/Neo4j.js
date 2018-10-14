@@ -6,10 +6,6 @@ class Neo4j {
     this.driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic(`${username}`, `${password}`));
   }
 
-  finalize() {
-    // this.driver.close();
-  }
-
   creatUser(username) {
     const session = this.driver.session();
 
@@ -24,7 +20,6 @@ class Neo4j {
       const record = result.records[0];
       const node = record.get(0);
 
-      this.finalize();
     }).catch(error => {
       console.log(error);
     });
@@ -38,7 +33,7 @@ class Neo4j {
       { name: `${username}` },
     ).then(result => {
       session.close();
-      this.finalize();
+
       const record = result.records[0];
       let node = null;
       if (result.records[0]) node = record.get(0);
@@ -57,7 +52,7 @@ class Neo4j {
       `Match (n:User)-[r]-(m) Where n.username='${username}' Return m`,
     ).then(result => {
       session.close();
-      this.finalize();
+
       const listUser = new Set();
       for (let i = 0; i < result.records.length; i++) {
         const record = result.records[i];
@@ -80,7 +75,7 @@ class Neo4j {
       `MATCH (:User {username: '${usernameA}'})-[r:${relationName}]-(b:User {username: '${usernameB}'}) RETURN r`,
     ).then(result => {
       session.close();
-      this.finalize();
+
       const listRelation = [];
       for (let i = 0; i < result.records.length; i++) {
         const record = result.records[i];
@@ -100,7 +95,7 @@ class Neo4j {
       `MATCH (:User {username: '${usernameA}'})-[r]-(:User {username: '${usernameB}'}) RETURN r`,
     ).then(result => {
       session.close();
-      this.finalize();
+
       let project = '';
       for (let i = 0; i < result.records.length; i++) {
         project += `${result.records[i].get(0).type}  `;
@@ -126,7 +121,7 @@ class Neo4j {
 
     resultPromise.then(result => {
       session.close();
-      this.finalize();
+
     }).catch(error => {
       console.log(error);
     });
