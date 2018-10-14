@@ -111,6 +111,7 @@ function alchemyRendering(username) {
       node.caption = name;
       node.type = name;
       node.id = name;
+      node.root = true;
       nodes.push(node);
     }
   });

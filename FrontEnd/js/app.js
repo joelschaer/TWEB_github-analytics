@@ -34,8 +34,13 @@ function requestData() {
                     dataSource: value,
                     nodeCaption: 'type',
                     nodeMouseOver: 'caption',
-                    cluster: true,
+                    forceLocked: true,
                     linkDistance: function(){ return 40; },
+                    cluster: true,
+                    "edgeStyle": {
+                            color: "#00fffa",
+                            width: 5
+                        },
                     clusterColours: ["#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02"],
                     "edgeClick": function (edge) {
                         console.log(edge);
@@ -43,7 +48,6 @@ function requestData() {
                         return edge._properties.source;
                     },
                 };
-                console.log(value);
                 return alchemy.begin(config);
             });
 }

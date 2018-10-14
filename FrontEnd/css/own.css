@@ -1,8 +1,8 @@
 .header {
     background-image: url("../images/background.png");
-    background-position: center; 
+    background-position: center;
     width: available;
-    height: 20em;
+    height: 40em;
     font-family: 'Press Start 2P', cursive;
 }
 
@@ -60,5 +60,12 @@ label {
     width: 300px;
     height: auto;
     color:  #289B75;
+}
+
+.edge-line{
+    stroke: grey !important;
+    stroke-width: 2 !important;
+    opacity: 0.2 !important;
+
 }
 
