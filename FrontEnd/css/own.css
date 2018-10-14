@@ -54,3 +54,10 @@ label {
     color: black !important;
     border: 0.3em dotted black;
 }
+
+#alchemyTextDiv {
+    width: 300px;
+    height: auto;
+    color:  #289B75;
+}
+

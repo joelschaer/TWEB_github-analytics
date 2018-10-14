@@ -9,7 +9,7 @@
 
 <div background="images/background.png" class="header">
     <div class="header-title">
-    <h1 id="test">BRAIN CONTRIBUTORS</h1>
+        <h1 id="test">BRAIN CONTRIBUTORS</h1>
     </div>
 </div>
 <div class="informations">
@@ -18,14 +18,15 @@
     <p>Then if you click on level 2, every X second that's return the contributors of a contributors</p>
 </div>
 <div class="SelectOwner">
-        <div class="form-group">
-            <label for="exampleGithubname">Github Projet Owner name</label>
-            <input name="name" id="name" type="name" class="form-control" id="exampleGithubname" aria-describedby="name" placeholder="Enter github name">
-        </div>
-        <button onclick="requestData()" class="btn btn-primary own-btn">Create the connections</button>
+    <div class="form-group">
+        <label for="exampleGithubname">Github Projet Owner name</label>
+        <input name="name" id="name" type="name" class="form-control" id="exampleGithubname" aria-describedby="name"
+               placeholder="Enter github name">
+    </div>
+    <button onclick="requestData()" class="btn btn-primary own-btn">Create the connections</button>
 
 </div>
-<div class="alchemy" id="alchemy"></div>
+    <div class="alchemy" id="alchemy"></div>
 
 <script type="text/javascript" src="bower_components/alchemyjs/dist/scripts/vendor.js"></script>
 <script type="text/javascript" src="bower_components/alchemyjs/dist/alchemy.js"></script>
@@ -36,7 +37,8 @@
         nodeCaption: 'type',
         nodeMouseOver: 'caption',
         cluster: true,
-        clusterColours: ["#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02"]})
+        clusterColours: ["#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02"]
+    })
 </script>
 </body>
 </html>
