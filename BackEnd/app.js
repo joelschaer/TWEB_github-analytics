@@ -77,18 +77,22 @@ function alchemyRenderingEdge(json, username, res) {
   const promises = [];
   const edges = [];
   for (const node in json.nodes) {
-    const name = json.nodes[node].caption;
+    const name1 = json.nodes[node].caption;
 
-    promises.push(db.getAllRelation(username, name).then((listRelation) => {
-      const relations = listRelation;
-      if (relations !== '') {
-        const edge = {};
-        edge.source = name;
-        edge.target = username;
-        edge.caption = relations;
-        edges.push(edge);
-      }
-    }));
+    for (const node in json.nodes) {
+      const name2 = json.nodes[node].caption;
+
+      promises.push(db.getAllRelation(name1, name2).then((listRelation) => {
+        const relations = listRelation;
+        if (relations !== '') {
+          const edge = {};
+          edge.source = name2;
+          edge.target = name1;
+          edge.caption = relations;
+          edges.push(edge);
+        }
+      }));
+    }
   }
   return Promise.all(promises).then((_) => {
     json.edges = edges;
@@ -111,18 +115,32 @@ function alchemyRendering(username) {
     }
   });
 
-  return db.getUserAllLevel1(username).then((listUser) => {
-    for (let i = 0; i < listUser.length; i++) {
-      const node = {};
-      const name = listUser[i];
-      node.caption = name;
-      node.type = name;
-      node.id = name;
-      nodes.push(node);
-    }
-    json.nodes = nodes;
-    return json;
-  });
+  return db.getUserAllLevel1(username)
+    .then((listUser) => {
+      for (let i = 0; i < listUser.length; i++) {
+        const node = {};
+        const name = listUser[i];
+        node.caption = name;
+        node.type = name;
+        node.id = name;
+        nodes.push(node);
+      }
+    }).then(() => db.getUserAllLevel2(username))
+    .then((listUser) => {
+      for (let i = 0; i < listUser.length; i++) {
+        const node = {};
+        const name = listUser[i];
+        node.caption = name;
+        node.type = name;
+        node.id = name;
+        nodes.push(node);
+      }
+    })
+    .then(() => {
+      json.nodes = nodes;
+      return json;
+    })
+    .catch(console.log);
 }
 
 app.get('/collaborateurs/:username', (req, res, next) => {
@@ -154,6 +172,7 @@ app.get('/collaborateurs/:username', (req, res, next) => {
     })
     .then((fifthResult) => {
       console.log(6);
+      console.log(fifthResult);
       return alchemyRenderingEdge(fifthResult, data.username);
     })
     .then((sixthResult) => {

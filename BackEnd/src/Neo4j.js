@@ -67,6 +67,52 @@ class Neo4j {
     });
   }
 
+  getUserAllLevel2(username) {
+    const session = this.driver.session();
+
+    return session.run(
+      // 'MATCH (user) RETURN user',
+      `Match (n:User)-[r]-(m)-[s]-(o) Where n.username='${username}' Return o`,
+    ).then(result => {
+      session.close();
+
+      const listUser = new Set();
+      for (let i = 0; i < result.records.length; i++) {
+        const record = result.records[i];
+        let name = '';
+        if (typeof result.records[0] !== 'undefined') name = record.get(0).properties.username;
+        listUser.add(name);
+      }
+      const arrayListUsers = Array.from(listUser);
+      return arrayListUsers;
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  getUserAllLevel3(username) {
+    const session = this.driver.session();
+
+    return session.run(
+      // 'MATCH (user) RETURN user',
+      `Match (n:User)-[r]-(m)-[s]-(o)-[t]-(p) Where n.username='${username}' Return p`,
+    ).then(result => {
+      session.close();
+
+      const listUser = new Set();
+      for (let i = 0; i < result.records.length; i++) {
+        const record = result.records[i];
+        let name = '';
+        if (typeof result.records[0] !== 'undefined') name = record.get(0).properties.username;
+        listUser.add(name);
+      }
+      const arrayListUsers = Array.from(listUser);
+      return arrayListUsers;
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
   getRelation(usernameA, usernameB, relationName) {
     const session = this.driver.session();
     relationName = relationName.replace(/-/g, '_');
