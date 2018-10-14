@@ -1,13 +1,14 @@
 .header {
     background-image: url("../images/background.png");
+    background-position: center; 
     width: available;
-    height: 57em;
+    height: 20em;
     font-family: 'Press Start 2P', cursive;
 }
 
 .header-title {
     position: absolute;
-    top: 30em;
+    top: 8em;
     left: 25em;
     color: #289B75;
 }

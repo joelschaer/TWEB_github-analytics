@@ -136,6 +136,17 @@ function alchemyRendering(username) {
         nodes.push(node);
       }
     })
+    .then(() => db.getUserAllLevel3(username))
+    .then((listUser) => {
+      for (let i = 0; i < listUser.length; i++) {
+        const node = {};
+        const name = listUser[i];
+        node.caption = name;
+        node.type = name;
+        node.id = name;
+        nodes.push(node);
+      }
+    })
     .then(() => {
       json.nodes = nodes;
       return json;

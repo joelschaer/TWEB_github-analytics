@@ -35,6 +35,7 @@ function requestData() {
                     nodeCaption: 'type',
                     nodeMouseOver: 'caption',
                     cluster: true,
+                    linkDistance: function(){ return 40; },
                     clusterColours: ["#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02"],
                     "edgeClick": function (edge) {
                         console.log(edge);
