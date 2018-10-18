@@ -9,7 +9,7 @@ const Neo4j = require('./src/Neo4j');
 const app = express();
 const port = process.env.PORT || 3200;
 const client = new Github({ token: process.env.OAUTH_TOKEN });
-const db = new Neo4j('neo4j', '1234');
+const db = new Neo4j(process.env.GRAPHENEDB_BOLT_URL, process.env.GRAPHENEDB_BOLT_USER, process.env.GRAPHENEDB_BOLT_PASSWORD);
 
 
 // Enable CORS for the client app

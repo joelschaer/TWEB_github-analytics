@@ -2,8 +2,8 @@ const neo4j = require('neo4j-driver').v1;
 
 
 class Neo4j {
-  constructor(username, password) {
-    this.driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic(`${username}`, `${password}`));
+  constructor(url, username, password) {
+    this.driver = neo4j.driver(url, neo4j.auth.basic(`${username}`, `${password}`));
   }
 
   creatUser(username) {
@@ -176,10 +176,3 @@ class Neo4j {
 
 module.exports = Neo4j;
 
-
-const neo = new Neo4j('neo4j', '1234');
-
-// neo.creatUser('joel');
-// neo.creatUser('yann');
-
-neo.newCollaborator('joel', 'yann', 'sym_repo');

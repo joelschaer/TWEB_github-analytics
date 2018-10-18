@@ -1,0 +1,21 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "live-server --host=localhost"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yannled/yannled.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yannled/yannled.github.io/issues"
+  },
+  "homepage": "https://github.com/yannled/yannled.github.io#readme",
+  "devDependencies": {
+    "live-server": "^1.2.0"
+  }
+}
