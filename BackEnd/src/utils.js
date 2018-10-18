@@ -10,7 +10,9 @@ function getContributorsName(data) {
     const name = [];
 
     let ok = false;
-
+    if (contributors[i] === null) {
+      continue;
+    }
     // parcours les contributeurs de chaque répos
     for (let j = 0; j < contributors[i].length; j++) {
       // on ne met pas le username dans la liste, seulement ses contributeurs

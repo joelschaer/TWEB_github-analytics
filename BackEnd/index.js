@@ -201,12 +201,10 @@ app.get('/collaborateurs/:username', (req, res, next) => {
     })
     .then((fifthResult) => {
       console.log(6);
-      console.log(fifthResult);
       return alchemyRenderingEdge(fifthResult, data.username);
     })
     .then((sixthResult) => {
       console.log(7);
-      console.log(sixthResult);
       res.send(sixthResult);
     });
 });

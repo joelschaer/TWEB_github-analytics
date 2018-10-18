@@ -55,20 +55,11 @@ class Github {
   userContributors(username) {
     return this.repos(username)
       .then((repos) => {
-        const getCollabo = repo => this.repoContributor(repo.full_name);
+        const getCollabo = repo => {
+          return this.repoContributor(repo.full_name)
+            .catch(() => null);
+        };
         return Promise.all(repos.map(getCollabo));
-      });
-  }
-
-  repoLanguages(repoName) {
-    return this.request(`/repos/${repoName}/languages`);
-  }
-
-  userLanguages(username) {
-    return this.repos(username)
-      .then((repos) => {
-        const getLanguages = repo => this.repoLanguages(repo.full_name);
-        return Promise.all(repos.map(getLanguages));
       });
   }
 }
