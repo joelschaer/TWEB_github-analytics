@@ -15,7 +15,8 @@ const db = new Neo4j(process.env.GRAPHENEDB_BOLT_URL, process.env.GRAPHENEDB_BOL
 // Enable CORS for the client app
 app.use(cors());
 
-app.get('/users/:username', (req, res, next) => { // eslint-disable-line no-unused-vars
+app.get('/users/:username', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
   client.user(req.params.username)
     .then(user => res.send(user))
     .catch(next);
@@ -173,6 +174,7 @@ function alchemyRendering(username) {
 }
 
 app.get('/collaborateurs/:username', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
   const data = {};
   data.username = req.params.username;
 
