@@ -104,48 +104,65 @@ function alchemyRendering(username) {
   const json = {};
   const nodes = [];
 
+  const userNames = [];
   db.getUser(username).then((user) => {
     if (user) {
       const name = user.properties.username;
-      const node = {};
-      node.caption = name;
-      node.type = name;
-      node.id = name;
-      node.root = true;
-      nodes.push(node);
+      if (!userNames.includes(name)) {
+        userNames.push(name);
+        const node = {};
+        node.caption = name;
+        node.type = name;
+        node.id = name;
+        node.root = true;
+        node.cluster = 1;
+        nodes.push(node);
+      }
     }
   });
 
   return db.getUserAllLevel1(username)
     .then((listUser) => {
       for (let i = 0; i < listUser.length; i++) {
-        const node = {};
         const name = listUser[i];
-        node.caption = name;
-        node.type = name;
-        node.id = name;
-        nodes.push(node);
+        if (!userNames.includes(name)) {
+          userNames.push(name);
+          const node = {};
+          node.caption = name;
+          node.type = name;
+          node.id = name;
+          node.cluster = 2;
+          nodes.push(node);
+        }
       }
     }).then(() => db.getUserAllLevel2(username))
     .then((listUser) => {
       for (let i = 0; i < listUser.length; i++) {
-        const node = {};
         const name = listUser[i];
-        node.caption = name;
-        node.type = name;
-        node.id = name;
-        nodes.push(node);
+        if (!userNames.includes(name)) {
+          userNames.push(name);
+          const node = {};
+          node.caption = name;
+          node.type = name;
+          node.id = name;
+          node.cluster = 3;
+          nodes.push(node);
+        }
       }
     })
     .then(() => db.getUserAllLevel3(username))
     .then((listUser) => {
       for (let i = 0; i < listUser.length; i++) {
-        const node = {};
         const name = listUser[i];
-        node.caption = name;
-        node.type = name;
-        node.id = name;
-        nodes.push(node);
+        if (!userNames.includes(name)) {
+          userNames.push(name);
+          const node = {};
+          node.caption = name;
+          node.type = name;
+          node.id = name;
+
+          nodes.push(node);
+        }
       }
     })
     .then(() => {

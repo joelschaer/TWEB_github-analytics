@@ -2,7 +2,7 @@
     background-image: url("../images/background.png");
     background-position: center;
     width: available;
-    height: 40em;
+    height: 32em;
     font-family: 'Press Start 2P', cursive;
 }
 
@@ -20,7 +20,7 @@
     padding-top: 5em;
     padding-left: 30em;
     padding-right: 30em;
-    padding-bottom: 5em;
+    padding-bottom: 1em;
 }
 
 h1 {
@@ -35,7 +35,7 @@ label {
 
 .SelectOwner {
     background-color: black;
-    padding-top: 5em;
+    padding-top: 1em;
     padding-left: 30em;
     padding-right: 30em;
     padding-bottom: 5em;
@@ -69,3 +69,66 @@ label {
 
 }
 
+.center{
+    text-align: center;
+}
+.loading {
+    margin-bottom: 15px;
+    display: inline-block;
+    border: 10px solid #000000; /* Light grey */
+    border-top: 10px solid #289B75; /* Blue */
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.hide{
+    display: none;
+}
+
+.CircleInfo{
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.CircleInfo i{
+size: 5px;
+}
+
+.CircleLevel1{
+    background-color: #1B9E77;
+}
+
+.CircleLevel2{
+    background-color: #255D9C;
+}
+
+.CircleLevel3{
+    background-color: #EFA129;
+}
+
+.CircleLevel4{
+    background-color: #AA3939;
+}
+
+#BtnTop {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+}

@@ -7,49 +7,63 @@ function getUserContributors(username){
         });
 }
 
-
-function clearAlchemy() {
-    return alchemy.begin({
-        dataSource: "{}",
-        nodeCaption: 'type',
-        nodeMouseOver: 'caption',
-        cluster: true,
-        clusterColours: ["#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02"]}
-    )
-}
-
-function requestData() {
+function requestData(name) {
+    var loader = document.getElementById("loading");
+    loader.classList.replace("hide", "loading");
     var div = document.createElement("div");
     div.setAttribute("id","alchemyTextDiv");
     var element = document.getElementById("alchemy");
     element.appendChild(div);
-    /*
-    var alchemySVG = element.getElementsByTagName("svg");
-    var elementSVG = alchemySVG[0];
-    elementSVG.appendChild(div);*/
-        var username = document.getElementById('name').value;
+    var username;
+        if(name) {
+            username = name;
+        }
+        else{
+            username = document.getElementById('name').value;
+        }
         getUserContributors(username)
             .then(value => {
                 var config = {
                     dataSource: value,
                     nodeCaption: 'type',
                     nodeMouseOver: 'caption',
-                    forceLocked: true,
-                    linkDistance: function(){ return 40; },
                     cluster: true,
                     "edgeStyle": {
                             color: "#00fffa",
                             width: 5
                         },
-                    clusterColours: ["#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02"],
+                    clusterColours: ["#1B9E77", "#255D9C", "#EFA129", "#AA3939", "#66A61E", "#E6AB02"],
                     "edgeClick": function (edge) {
                         console.log(edge);
                         div.innerHTML = "List project : " + edge._properties.caption;
                         return edge._properties.source;
                     },
                 };
-                return alchemy.begin(config);
+                alchemy = new Alchemy(config);
+                loader.classList.replace("loading", "hide");
+                bottomFunction();
+                return alchemy.begin();
             });
+}
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("BtnTop").style.display = "block";
+    } else {
+        document.getElementById("BtnTop").style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+
+function bottomFunction() {
+    window.scrollTo(0,document.body.scrollHeight);
 }
 
 

@@ -3,20 +3,36 @@
     <link rel="stylesheet" type="text/css" href="bower_components/alchemyjs/dist/styles/vendor.css">
     <link rel="stylesheet" href="bower_components/alchemyjs/dist/alchemy.css">
     <link rel="stylesheet" href="css/own.css">
-    <link rel="stylesheet" href="css/alchemy.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+          integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
 </head>
 <body>
+<button onclick="topFunction()" id="BtnTop" title="Go to top">
+    <span style="font-size: 100px; color: #AA3939;">
+  <i class="fas fa-angle-up"></i>
+</span>
 
+</button>
 <div background="images/background.png" class="header">
     <div class="header-title">
         <h1 id="test">BRAIN CONTRIBUTORS</h1>
     </div>
 </div>
 <div class="informations">
-    <p>Choice a Github Username and creates the connnections !</p>
-    <p>The first request return the username choiced, after X second, that's return his contributors</p>
-    <p>Then if you click on level 2, every X second that's return the contributors of a contributors</p>
+    <p>1. Choose a Github Username and creates the connnections !</p>
+    <p>2. Clic on edges to see the related projects </p>
+    <p>3. Double clic on node to make a new search </p>
+    </br>
+    <span class="CircleInfo CircleLevel1"></span> Node Root
+    </br>
+    <span class="CircleInfo CircleLevel2"> </span> Node first level
+    </br>
+    <span class="CircleInfo CircleLevel3"></span> Node second level
+    </br>
+    <span class="CircleInfo CircleLevel4"></span> Node third level
+
+
 </div>
 <div class="SelectOwner">
     <div class="form-group">
@@ -24,10 +40,13 @@
         <input name="name" id="name" type="name" class="form-control" id="exampleGithubname" aria-describedby="name"
                placeholder="Enter github name">
     </div>
+    <div class="center">
+        <div id="loading" class="hide"></div>
+    </div>
     <button onclick="requestData()" class="btn btn-primary own-btn">Create the connections</button>
 
 </div>
-    <div class="alchemy" id="alchemy"></div>
+<div class="alchemy" id="alchemy"></div>
 
 <script type="text/javascript" src="bower_components/alchemyjs/dist/scripts/vendor.js"></script>
 <script type="text/javascript" src="bower_components/alchemyjs/dist/alchemy.js"></script>
