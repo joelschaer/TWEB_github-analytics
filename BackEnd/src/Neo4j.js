@@ -44,6 +44,28 @@ class Neo4j {
     });
   }
 
+  getUserAll() {
+    const session = this.driver.session();
+
+    return session.run(
+      'Match (n:User) Return n',
+    ).then(result => {
+      session.close();
+
+      const listUser = new Set();
+      for (let i = 0; i < result.records.length; i++) {
+        const record = result.records[i];
+        let name = '';
+        if (typeof result.records[0] !== 'undefined') name = record.get(0).properties.username;
+        listUser.add(name);
+      }
+      const arrayListUsers = Array.from(listUser);
+      return arrayListUsers;
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
   getUserAllLevel1(username) {
     const session = this.driver.session();
 
