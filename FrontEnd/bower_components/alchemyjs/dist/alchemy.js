@@ -1139,7 +1139,7 @@
         }
       },
       nodeDoubleClick: function(d) {
-        requestData(d.id);
+        requestData(d.id,'quick');
       },
       deselectAll: function() {
         var _ref;

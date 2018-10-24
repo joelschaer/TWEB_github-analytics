@@ -1,28 +1,66 @@
 
-function getUserContributors(username){
-    return fetch(`https://git-contributors.herokuapp.com/collaborateurs/${username}`)
-        .then(res => {
-            console.log('1');
-            return res.json();
-        });
+
+function getUserContributors(username, searchType){
+    //return fetch(`https://git-contributors.herokuapp.com/collaborateurs/${username}`)
+    if(searchType === 'quick'){
+        return fetch(`http://localhost:3200/collaborateurs/quick/${username}`)
+            .then(res => {
+                console.log('1');
+                return res.json();
+            });
+    }
+    else{
+        return fetch(`http://localhost:3200/collaborateurs/${username}`)
+            .then(res => {
+                console.log('1');
+                return res.json();
+            });
+    }
 }
 
-function requestData(name) {
+function requestData(name,searchType) {
+    //delete old alchemy div if exist
+    var oldAlchemy = document.getElementById("alchemy");
+    var oldGraph = oldAlchemy.getElementsByTagName("svg");
+    if(oldGraph.length !== 0)
+        oldAlchemy.removeChild(oldGraph[0]);
+    // element affichant une erreur.
+    var error = document.getElementById("error");
+    error.classList.replace("error", "hide");
+
+    // element affichant le temps d'attente.
     var loader = document.getElementById("loading");
     loader.classList.replace("hide", "loading");
-    var div = document.createElement("div");
-    div.setAttribute("id","alchemyTextDiv");
+
+    // div affichant les noms de projets (edges)
+    var div;
+    if(document.getElementById("alchemyTextDiv")){
+        div = document.getElementById("alchemyTextDiv")
+    }
+    else {
+        div = document.createElement("div");
+        div.setAttribute("id","alchemyTextDiv");
+    }
     var element = document.getElementById("alchemy");
     element.appendChild(div);
+
+    // récupére le nom et lance la requete
     var username;
-        if(name) {
+        if(name && name !== '') {
+            console.log(name);
             username = name;
         }
         else{
             username = document.getElementById('name').value;
         }
-        getUserContributors(username)
+        getUserContributors(username, searchType)
             .then(value => {
+                if(value.nodes.length === 0){
+                    error.classList.replace("hide", "error");
+                    error.innerText = 'Error, no nodes in database, perform a long search !!!'
+                    loader.classList.replace("loading", "hide");
+                }
+                else {
                 var config = {
                     dataSource: value,
                     nodeCaption: 'type',
@@ -42,7 +80,8 @@ function requestData(name) {
                 alchemy = new Alchemy(config);
                 loader.classList.replace("loading", "hide");
                 bottomFunction();
-                return alchemy.begin();
+                return alchemy.updateGraph(config);
+                }
             });
 }
 

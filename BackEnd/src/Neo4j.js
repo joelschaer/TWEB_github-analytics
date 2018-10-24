@@ -19,7 +19,6 @@ class Neo4j {
 
       const record = result.records[0];
       const node = record.get(0);
-
     }).catch(error => {
       console.log(error);
     });
@@ -178,6 +177,7 @@ class Neo4j {
     // Replace '-' and '/' by '_' for the database request.
     repository = repository.replace(/-/g, '_');
     repository = repository.replace('/', '_');
+    repository = repository.replace('.', '_');
     const session = this.driver.session();
 
     const resultPromise = session.run(
@@ -189,7 +189,17 @@ class Neo4j {
 
     resultPromise.then(result => {
       session.close();
+    }).catch(error => {
+      console.log(error);
+    });
+  }
 
+  deleteAllNodes() {
+    const session = this.driver.session();
+    const resultPromise = session.run('MATCH (n) DETACH DELETE n');
+
+    resultPromise.then(result => {
+      session.close();
     }).catch(error => {
       console.log(error);
     });
@@ -197,4 +207,3 @@ class Neo4j {
 }
 
 module.exports = Neo4j;
-

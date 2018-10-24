@@ -18,8 +18,8 @@
     font-family: 'Press Start 2P', cursive;
     background-color: black;
     padding-top: 5em;
-    padding-left: 30em;
-    padding-right: 30em;
+    padding-left: 30rem;
+    padding-right: 30rem;
     padding-bottom: 1em;
 }
 
@@ -47,6 +47,8 @@ label {
     background: #289B75 !important;
     color: black !important;
     border: 0.15em dotted black;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 .own-btn:hover{
@@ -131,4 +133,9 @@ size: 5px;
     background-color: transparent;
     color: white;
     cursor: pointer;
+}
+
+.error {
+    font-family: 'Press Start 2P', cursive;
+    color:  #AA3939;
 }

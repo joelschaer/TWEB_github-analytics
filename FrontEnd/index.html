@@ -20,9 +20,11 @@
     </div>
 </div>
 <div class="informations">
-    <p>1. Choose a Github Username and creates the connnections !</p>
-    <p>2. Clic on edges to see the related projects </p>
-    <p>3. Double clic on node to make a new search </p>
+    <p>1. Choose a Github Username !</p>
+    <p>2. Click on quick search to make a research in our database !</p>
+    <p>3. Click on long search to make a research in Github !</p>
+    <p>4. Clic on edges to see the related projects !</p>
+    <p>5. Double clic on node to make a new search ! (quick search)</p>
     </br>
     <span class="CircleInfo CircleLevel1"></span> Node Root
     </br>
@@ -43,7 +45,13 @@
     <div class="center">
         <div id="loading" class="hide"></div>
     </div>
-    <button onclick="requestData()" class="btn btn-primary own-btn">Create the connections</button>
+    <label>Create the connections !</label>
+    <br>
+    <button onclick="requestData(null,'quick')" class="btn btn-primary own-btn">Quick search</button>
+    <button onclick="requestData(null,'long')" class="btn btn-primary own-btn">Long search</button>
+    <div class="center">
+        <div id="error" class="hide"></div>
+    </div>
 
 </div>
 <div class="alchemy" id="alchemy"></div>
