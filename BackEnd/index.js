@@ -6,6 +6,7 @@ const cors = require('cors');
 const schedule = require('node-schedule');
 const Github = require('./src/Github');
 const utils = require('./src/utils');
+const tools = require('./src/Tools');
 const Neo4j = require('./src/Neo4j');
 const service_resetDB = require('./services/ResetDatabase');
 const service_fillDB = require('./services/crawler');
@@ -13,8 +14,6 @@ const service_fillDB = require('./services/crawler');
 const app = express();
 const port = process.env.PORT || 3200;
 const client = new Github({ token: process.env.OAUTH_TOKEN });
-const db = new Neo4j(process.env.GRAPHENEDB_BOLT_URL, process.env.GRAPHENEDB_BOLT_USER, process.env.GRAPHENEDB_BOLT_PASSWORD);
-
 
 // Enable CORS for the client app
 app.use(cors());
@@ -131,5 +130,5 @@ app.listen(port, () => {
 schedule.scheduleJob({ hour: 0, minute: 0 }, () => {
   console.log('It is time to reset the database !');
   service_resetDB.resetDatabase();
-  console.warn(`Database reset at ${utils.getDateTime()}`);
+  console.warn(`Database reset at ${tools.getDateTime()}`);
 });

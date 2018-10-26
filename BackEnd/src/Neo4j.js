@@ -1,5 +1,5 @@
 const neo4j = require('neo4j-driver').v1;
-
+const tools = require('../src/Tools');
 
 class Neo4j {
   constructor(url, username, password) {
@@ -136,8 +136,7 @@ class Neo4j {
 
   getRelation(usernameA, usernameB, relationName) {
     const session = this.driver.session();
-    relationName = relationName.replace(/-/g, '_');
-    relationName = relationName.replace('/', '_');
+    relationName = tools.formatStringForNeo4j(relationName);
     return session.run(
       `MATCH (:User {username: '${usernameA}'})-[r:${relationName}]-(b:User {username: '${usernameB}'}) RETURN r`,
     ).then(result => {
@@ -174,10 +173,7 @@ class Neo4j {
   }
 
   newCollaborator(user, collaborator, repository) {
-    // Replace '-' and '/' by '_' for the database request.
-    repository = repository.replace(/-/g, '_');
-    repository = repository.replace('/', '_');
-    repository = repository.replace('.', '_');
+    repository = tools.formatStringForNeo4j(repository);
     const session = this.driver.session();
 
     const resultPromise = session.run(
@@ -187,6 +183,19 @@ class Neo4j {
       { user: `${user}`, collaborator: `${collaborator}` },
     );
 
+    resultPromise.then(result => {
+      session.close();
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  deleteOneNode(username) {
+    const session = this.driver.session();
+
+    const resultPromise = session.run(
+      `MATCH (n { username: "${username}" }) DETACH DELETE n`,
+    );
     resultPromise.then(result => {
       session.close();
     }).catch(error => {
