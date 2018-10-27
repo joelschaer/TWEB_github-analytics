@@ -105,5 +105,13 @@ function bottomFunction() {
     window.scrollTo(0,document.body.scrollHeight);
 }
 
+function showErrors() {
+    var x = document.getElementById("errors");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
 
 

@@ -4,7 +4,7 @@ const utils = require('../src/utils');
 const Neo4j = require('../src/Neo4j');
 
 const client = new Github({ token: process.env.OAUTH_TOKEN });
-const db = new Neo4j('bolt://localhost:7687', 'neo4j', '1234');
+const db = new Neo4j(process.env.GRAPHENEDB_BOLT_URL, process.env.GRAPHENEDB_BOLT_USER, process.env.GRAPHENEDB_BOLT_PASSWORD);
 
 /* asynchrone, but not working, the functions are not folling properly ** */
 function crawlUsers() {

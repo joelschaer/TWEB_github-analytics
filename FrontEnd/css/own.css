@@ -20,7 +20,7 @@
     padding-top: 5em;
     padding-left: 30rem;
     padding-right: 30rem;
-    padding-bottom: 1em;
+    padding-bottom: 2em;
 }
 
 h1 {
@@ -138,4 +138,19 @@ size: 5px;
 .error {
     font-family: 'Press Start 2P', cursive;
     color:  #AA3939;
+}
+.bugs {
+    border: none;
+    background-color: black;
+    padding-top: 1em;
+    color: #AA3939;
+    font-size: 0.8em;
+}
+
+.bugs .fas {
+    font-size: 2em;
+}
+
+.bugs span {
+    font-size: 0.8em !important;
 }
