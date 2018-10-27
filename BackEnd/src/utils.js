@@ -5,9 +5,7 @@ const db = new Neo4j(process.env.GRAPHENEDB_BOLT_URL, process.env.GRAPHENEDB_BOL
 function getContributorsName(data) {
   const repos = data.repos;
   const contributors = data.contributors;
-
   const listrepos = {};
-
   // parcours les bloc de contributeurs (correspond aux repositorys)
   for (let i = 0; i < contributors.length; i++) {
     const name = [];
