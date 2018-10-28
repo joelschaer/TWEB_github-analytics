@@ -8,6 +8,7 @@ Technologies utilisées :
 - Alchemy.js
 
 ### build de l'application
+Vérifier dans la page `app.js`que les requêtes pointe sur votre serveur (`http://localhost:3200/`)
 Se trouver dans le dossier FrontEnd et faire un `live-server`
 
 ## Backend
@@ -38,6 +39,10 @@ Technologies utilisées :
 
 
 ### build de l'application
+Installer la base de données Neo4j https://neo4j.com/
+- Mettre les infos de connections de la base de donnée dans le fichier .env
+Récupérer un token Github.
+- Mettre le votre token Github dans le fichier .env
 Se trouver dans le dossier Backend.
 - Faire un `npm install`
 - Vérifier que le dossier node_modules à été correctement créé.
