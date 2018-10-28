@@ -28,6 +28,22 @@ const client = new Github({ token: process.env.OAUTH_TOKEN });
 // Enable CORS for the client app
 app.use(cors());
 
+// Start a Crawler who field the database
+app.get('/fillme', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  service_fillDB.crawlUsers();
+  console.warn('Database is fill up !');
+  res.send('<h1> Database is filling  </h1>');
+});
+
+// reset the database
+app.get('/reset', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  service_resetDB.resetDatabase();
+  console.warn('Database is reset !');
+  res.send('<h1> Database is deleting </h1>');
+});
+
 /*
 ## LONG SEARCH with github
 1. Get Contributors from Github
@@ -103,19 +119,6 @@ app.get('/contributors/quick/:username', (req, res, next) => {
     });
 });
 
-// Start a Crawler who field the database
-app.get('/fillme', (req, res, next) => {
-  service_fillDB.crawlUsers();
-  console.warn('Database is fill up !');
-  res.send('<h1> Database is filling  </h1>');
-});
-
-// reset the database
-app.get('/reset', (req, res, next) => {
-  service_resetDB.resetDatabase();
-  console.warn('Database is reset !');
-  res.send('<h1> Database is deleting </h1>');
-});
 
 // Forward 404 to error handler
 app.use((req, res, next) => {
