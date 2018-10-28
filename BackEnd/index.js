@@ -28,7 +28,10 @@ const client = new Github({ token: process.env.OAUTH_TOKEN });
 // Enable CORS for the client app
 app.use(cors());
 
-// Start a Crawler who field the database
+/** Start a Crawler who fiels the database
+ * The functions probided by the crawler generates a high amount of work and is not
+ * really good suported. There by it should rather not be used.
+ */
 app.get('/fillme', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   service_fillDB.crawlUsers();
@@ -62,35 +65,29 @@ app.get('/contributors/:username', (req, res, next) => {
   client.userContributors(data.username)
     .then((result) => {
       // 1. Get Contributors from the research, then get his repository.
-      console.log(1);
       data.contributors = result;
       return client.repos(data.username);
     })
     .then((newResult) => {
       // 2. Filtering of the github data and layout.
-      console.log(2);
       data.repos = newResult;
       return utils.getContributorsName(data);
     })
     .then((thirdResult) => {
       // 3. Add the informations in the DB if not already exist.
-      console.log(3);
       data.contributorsByRepos = thirdResult;
       return utils.addInDB(data.contributorsByRepos, data.username);
     })
     .then((fourthResult) => {
       // 4. lay out the nodes(contributors) data for the frontEnd Alchemy plugin.
-      console.log(5);
       return utils.alchemyRendering(data.username);
     })
     .then((fifthResult) => {
       // 5. lay out the edges(projects) data for the frontEnd Alchemy plugin.
-      console.log(6);
       return utils.alchemyRenderingEdge(fifthResult, data.username);
     })
     .then((sixthResult) => {
       // 6. Send the data.
-      console.log(7);
       res.send(sixthResult);
     });
 });
@@ -109,12 +106,10 @@ app.get('/contributors/quick/:username', (req, res, next) => {
   return utils.alchemyRendering(data.username)
     .then((jsonNode) => {
       // 5. lay out the edges(projects) data for the frontEnd Alchemy plugin.
-      console.log(6);
       return utils.alchemyRenderingEdge(jsonNode, data.username);
     })
     .then((sixthResult) => {
       // 6. Send the data.
-      console.log(7);
       res.send(sixthResult);
     });
 });

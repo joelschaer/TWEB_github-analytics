@@ -6,6 +6,7 @@
  * Getting all nodes already in the database and searching for all collaborators linked to each one of them.
  * Known problem with this function, if we have a lot of nodes it doesn't work properly. We assume that this is caused
  * by asynchronous task not following each other properly. We couldn't find a solution for it.
+ * It may possibly make the application crash and should rather not be used.
  */
 require('dotenv/config');
 const Github = require('../src/Github');

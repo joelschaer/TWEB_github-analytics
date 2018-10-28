@@ -97,7 +97,7 @@ function addInDB(data, username) {
 
   Promise.all(initialPromises).then();
   Promise.all(promisesUser).then();
-  Promise.all(promisesProject).then(console.log(4));
+  Promise.all(promisesProject).then();
 }
 
 /** creating the json structure needed by alchemy js to render the graph edges*/

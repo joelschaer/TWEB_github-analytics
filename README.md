@@ -34,8 +34,23 @@ Technologies utilisées :
 - node-schedule
 - Test :
   - esLint
+
   - mocha
+
   - chai
+
+
+## Install Neo4j
+
+Le Backend utilise une base de donnée en noeud. Nous allons utiliser Neo4j. Il est nécessaire d'installer un serveur pour cela.
+
+    -  Télécharger Neo4j community depuis: https://neo4j.com/download-center/#releases
+
+- Démarrer le serveur : `<neo4j installation root>/bin/neo4j start` 
+- Ouvrir le navigateur : http://localhost:7474/ 
+- Créer un utilisateur "neo4j" avec un mot de passe
+
+Il faut ensuite configurer les bonne information de connexion dans `.env` du backend afin qu'il puisse utiliser la base de donnée.
 
 
 ### build de l'application

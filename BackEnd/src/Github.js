@@ -47,22 +47,22 @@ class Github {
         }));
   }
 
-  /** retrive the user information for a given username */
+  /** retrieve the user information for a given username */
   user(username) {
     return this.request(`/users/${username}`);
   }
 
-  /** retrives all repositories for a given username */
+  /** retrieves all repositories for a given username */
   repos(username) {
     return this.request(`/users/${username}/repos`);
   }
 
-  /** retrives all contributors for a given repository */
+  /** retrieves all contributors for a given repository */
   repoContributor(reponame) {
     return this.request(`/repos/${reponame}/contributors`);
   }
 
-  /** retrives all contributors to a given username
+  /** retrieves all contributors to a given username
    *  Those are all users having donne a contribution on the same repo than the given username
    */
   userContributors(username) {
