@@ -19,7 +19,7 @@ La base de données est hebergée sur GrapenDB via Heroku.
 Requête possibles :
 - `/contributors/:username` : récupère un Json près formaté pour alchemy.js affichant les contributeurs d'un username github donné à partir de l'API Github.
 - `/contributors/quick/:username` : récupère un Json près formaté pour alchemy.js affichant les contributeurs d'un username github donné à partir de la base de donnée.
-- `/fillme` : effectues de multiples recherches sur Github afin de remplir la base de données à partir des noeuds existants. (Attention : lorsque il y a trop de données, certains soucis peuvent se déclarer !)
+- `/fillme` : effectues de multiples recherches sur Github afin de remplir la base de données à partir des noeuds existants. (ATTENTION : Dans la version actuelle, évitez de l'utiliser, lorsque il y a trop de données, certains soucis peuvent se déclarer. voir faire planter l'application !)
 - `/reset` : réinitialise totalement la base de données.
 
 Fonctions supplémentaires :
