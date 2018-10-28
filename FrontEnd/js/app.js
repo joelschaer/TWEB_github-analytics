@@ -3,14 +3,14 @@
 function getUserContributors(username, searchType){
     //return fetch(`https://git-contributors.herokuapp.com/collaborateurs/${username}`)
     if(searchType === 'quick'){
-        return fetch(`http://localhost:3200/collaborateurs/quick/${username}`)
+        return fetch(`http://localhost:3200/contributors/quick/${username}`)
             .then(res => {
                 console.log('1');
                 return res.json();
             });
     }
     else{
-        return fetch(`http://localhost:3200/collaborateurs/${username}`)
+        return fetch(`http://localhost:3200/contributors/${username}`)
             .then(res => {
                 console.log('1');
                 return res.json();

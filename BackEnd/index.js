@@ -28,7 +28,7 @@ of every repos, if he's not the only contributors and lay out the data.
 5. lay out the edges(projects) data for the frontEnd Alchemy plugin
 6. Send the data.
  */
-app.get('/collaborateurs/:username', (req, res, next) => {
+app.get('/contributors/:username', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   const data = {};
   data.username = req.params.username;
@@ -75,7 +75,7 @@ app.get('/collaborateurs/:username', (req, res, next) => {
 5. lay out the edges(projects) data for the frontEnd Alchemy plugin
 6. Send the data.
  */
-app.get('/collaborateurs/quick/:username', (req, res, next) => {
+app.get('/contributors/quick/:username', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   const data = {};
   data.username = req.params.username;
