@@ -1,3 +1,13 @@
+/**
+ * BrainContributors
+ * Authors Yann Lederrey and Joel Schär
+ *
+ * BrainContributor backend puts together users with their contributors.
+ * It takes all users having worked together on each of their projects hosted by github and on a public repositry.
+ * It stores this information in a node database (neo4j) with the associate links.
+ * On a frontend request it will retrive a json payload out of the database so that the Alchemy js
+ * plugin with be able to reder a nice node graph.
+ */
 /* eslint-disable no-console */
 // loads environment variables
 require('dotenv/config');

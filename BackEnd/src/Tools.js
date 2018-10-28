@@ -1,3 +1,11 @@
+/**
+ * BrainContributors
+ * Authors Yann Lederrey and Joel Schär
+ *
+ * Formating function for the project.
+ */
+
+/** Returns the current timestamp */
 function getDateTime() {
   const date = new Date();
 
@@ -21,6 +29,7 @@ function getDateTime() {
   return `${year}:${month}:${day}:${hour}:${min}:${sec}`;
 }
 
+/** returns the entry string replacing noe4j unsuported caracters by an underscore */
 function formatStringForNeo4j(maString) {
   maString = maString.replace(/-/g, '_');
   maString = maString.replace('/', '_');

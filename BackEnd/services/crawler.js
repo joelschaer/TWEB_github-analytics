@@ -1,3 +1,12 @@
+/**
+ * BrainContributors
+ * Authors Yann Lederrey and Joel Schär
+ *
+ * Creates an additionnal relation level.
+ * Getting all nodes already in the database and searching for all collaborators linked to each one of them.
+ * Known problem with this function, if we have a lot of nodes it doesn't work properly. We assume that this is caused
+ * by asynchronous task not following each other properly. We couldn't find a solution for it.
+ */
 require('dotenv/config');
 const Github = require('../src/Github');
 const utils = require('../src/utils');
@@ -6,7 +15,6 @@ const Neo4j = require('../src/Neo4j');
 const client = new Github({ token: process.env.OAUTH_TOKEN });
 const db = new Neo4j(process.env.GRAPHENEDB_BOLT_URL, process.env.GRAPHENEDB_BOLT_USER, process.env.GRAPHENEDB_BOLT_PASSWORD);
 
-/* asynchrone, but not working, the functions are not folling properly ** */
 function crawlUsers() {
   console.log('crawl');
 
@@ -43,39 +51,6 @@ function crawlUsers() {
   });
   console.log('6');
 }
-
-/* not working har unresolved promises.
-function crawlUsers() {
-  console.log('crawl');
-
-  db.getUserAll().then((userList) => {
-    console.log(userList);
-
-    userList.forEach((username) => {
-      console.log(`crawl: ${username}`);
-      console.log('1');
-      const data = {};
-      data.username = username;
-      console.log('2');
-      // get users contributors
-      data.contributors = client.userContributors(username);
-      console.log('3');
-      console.log(data.contributors);
-      // get the repos form username
-      data.repos = client.repos(username);
-      console.log('4');
-      console.log(data.repos);
-      // group repository and contributors and filter where username is not contributors.
-      const contributorsByRepos = utils.getContributorsName(data);
-      console.log('5');
-      console.log(contributorsByRepos);
-      // add username and collaborators to db
-      utils.addInDB(contributorsByRepos, username);
-    });
-  });
-  console.log('6');
-}
-*/
 
 
 module.exports = {

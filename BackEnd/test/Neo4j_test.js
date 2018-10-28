@@ -1,4 +1,9 @@
-
+/**
+ * BrainContributors
+ * Authors Yann Lederrey and Joel Schär
+ *
+ * Tests for functions in Neo4j.js
+ */
 require('dotenv/config');
 
 const chai = require('chai');

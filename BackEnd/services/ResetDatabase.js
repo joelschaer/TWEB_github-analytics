@@ -1,3 +1,10 @@
+/**
+ * BrainContributors
+ * Authors Yann Lederrey and Joel Schär
+ *
+ * Deleting all nodes in the database. Is called when a reset of the databse is requested.
+ */
+
 require('dotenv/config');
 const Neo4j = require('../src/Neo4j');
 

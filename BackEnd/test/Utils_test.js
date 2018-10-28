@@ -1,3 +1,9 @@
+/**
+ * BrainContributors
+ * Authors Yann Lederrey and Joel Schär
+ *
+ * Tests for functions in utils.js
+ */
 require('dotenv/config');
 const { expect } = require('chai');
 const utils = require('../src/utils');

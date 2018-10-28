@@ -1,3 +1,10 @@
+/**
+ * BrainContributors
+ * Authors Yann Lederrey and Joel Schär
+ *
+ * Neo4j access class. Gives the project needed function to access the neo4j database.
+ * Initialisation of the database connexion and retriving the needed information.
+ */
 const neo4j = require('neo4j-driver').v1;
 const tools = require('../src/Tools');
 
@@ -6,6 +13,7 @@ class Neo4j {
     this.driver = neo4j.driver(url, neo4j.auth.basic(`${username}`, `${password}`));
   }
 
+  /** creates a node with the given username */
   creatUser(username) {
     const session = this.driver.session();
 
@@ -24,6 +32,7 @@ class Neo4j {
     });
   }
 
+  /** returns the node for the requested username */
   getUser(username) {
     const session = this.driver.session();
 
@@ -43,6 +52,7 @@ class Neo4j {
     });
   }
 
+  /** returns a array with all nodes present in the database */
   getUserAll() {
     const session = this.driver.session();
 
@@ -65,6 +75,8 @@ class Neo4j {
     });
   }
 
+  /** returns an array with all nodes having a link to the given username on the first relationnal
+   * degree */
   getUserAllLevel1(username) {
     const session = this.driver.session();
 
@@ -88,6 +100,8 @@ class Neo4j {
     });
   }
 
+  /** returns an array with all nodes having a link to the given username on the second relationnal
+   * degree */
   getUserAllLevel2(username) {
     const session = this.driver.session();
 
@@ -111,6 +125,8 @@ class Neo4j {
     });
   }
 
+  /** returns an array with all nodes having a link to the given username on the third relationnal
+   * degree */
   getUserAllLevel3(username) {
     const session = this.driver.session();
 
@@ -134,6 +150,7 @@ class Neo4j {
     });
   }
 
+  /** returns an array with the relations between user A and user B and the given relation name */
   getRelation(usernameA, usernameB, relationName) {
     const session = this.driver.session();
     relationName = tools.formatStringForNeo4j(relationName);
@@ -155,6 +172,7 @@ class Neo4j {
     });
   }
 
+  /** returns a string containing all relation names between the two given users */
   getAllRelation(usernameA, usernameB) {
     const session = this.driver.session();
     return session.run(
@@ -172,6 +190,8 @@ class Neo4j {
     });
   }
 
+  /** create a new node and the relation between the given user and a collaorator for a given 
+   * repository */
   newCollaborator(user, collaborator, repository) {
     repository = tools.formatStringForNeo4j(repository);
     const session = this.driver.session();
@@ -190,6 +210,7 @@ class Neo4j {
     });
   }
 
+  /** delte the node with the given username */
   deleteOneNode(username) {
     const session = this.driver.session();
 
@@ -203,6 +224,7 @@ class Neo4j {
     });
   }
 
+  /** delete all nodes in the database */
   deleteAllNodes() {
     const session = this.driver.session();
     const resultPromise = session.run('MATCH (n) DETACH DELETE n');

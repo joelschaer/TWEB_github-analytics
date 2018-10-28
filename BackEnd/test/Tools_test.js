@@ -1,3 +1,9 @@
+/**
+ * BrainContributors
+ * Authors Yann Lederrey and Joel Schär
+ *
+ * Tests for functions in Tool.js
+ */
 require('dotenv/config');
 const { expect } = require('chai');
 const tools = require('../src/Tools');

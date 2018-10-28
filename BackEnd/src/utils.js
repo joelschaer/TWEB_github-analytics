@@ -1,12 +1,21 @@
+/**
+ * BrainContributors
+ * Authors Yann Lederrey and Joel Schär
+ *
+ * Provides multiple function for the backend work flow.
+ */
 const Neo4j = require('../src/Neo4j');
 
 const db = new Neo4j(process.env.GRAPHENEDB_BOLT_URL, process.env.GRAPHENEDB_BOLT_USER, process.env.GRAPHENEDB_BOLT_PASSWORD);
 
+/** entry: dictionnary with all repos and contributrors from one user
+ * returns a dictionnary with all contributors and their associte contribution repository.
+ */
 function getContributorsName(data) {
   const repos = data.repos;
   const contributors = data.contributors;
   const listrepos = {};
-  // parcours les bloc de contributeurs (correspond aux repositorys)
+  // parcours les bloc de contributeurs (correspondant aux repositories)
   for (let i = 0; i < contributors.length; i++) {
     const name = [];
 
@@ -38,7 +47,7 @@ function getContributorsName(data) {
   return listrepos;
 }
 
-// same function as in index
+/** Adding contributors to the database creating the right links between the given username */
 function addInDB(data, username) {
   // ajoute le username si existe pas.
   const initialPromises = [];
@@ -91,6 +100,7 @@ function addInDB(data, username) {
   Promise.all(promisesProject).then(console.log(4));
 }
 
+/** creating the json structure needed by alchemy js to render the graph edges*/
 function alchemyRenderingEdge(json, username, res) {
   const promises = [];
   const edges = [];
@@ -118,6 +128,9 @@ function alchemyRenderingEdge(json, username, res) {
   });
 }
 
+/** creating the json payload with the structure needed by alchemy js to render a graph
+ * takes three level of association degrees.
+*/
 function alchemyRendering(username) {
   const json = {};
   const nodes = [];
